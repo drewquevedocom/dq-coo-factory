@@ -1,0 +1,71 @@
+# Drew's personal orchestrator. Separate instance, separate memory.
+# Kept apart from business on purpose: context must not bleed across.
+
+client:
+  slug: drew-personal
+  business_name: Drew Quevedo — Personal
+  industry: Household and personal
+  owner_name: Drew
+  owner_timezone: America/Los_Angeles
+  one_liner: >
+    Runs the personal side: the morning check, family logistics for a house
+    of seven, Uber and Lyft earnings, and the health routine.
+
+delivery:
+  target: hermes-vps
+  host_notes: >
+    Same Oracle box as the business instance, separate data directory and
+    separate Telegram chat. No shared memory between the two.
+  data_location: Drew's own VPS
+
+stack:
+  email: gmail
+  calendar: google
+  crm: none
+  accounting: none
+  website: none
+  phone: none
+  storage: TODO             # confirm
+  other: []
+
+integrations_requested:
+  - gmail
+  - google-calendar
+  - telegram
+
+agents:
+  daily_brief:      true
+  lead_triage:      false
+  inbox_triage:     false
+  invoice_chase:    false
+  content_engine:   false
+  rnd_scout:        false
+
+schedule:
+  daily_brief_time:   "06:30"   # before the house wakes up; TODO confirm
+  weekly_review_day:  "sunday"
+  rnd_scan_day:       "friday"
+  quiet_hours:        "21:00-06:00"
+
+contact:
+  primary: telegram
+  escalation: email
+  wake_for: []                  # nothing personal is worth a 2am ping
+
+approval_gates:
+  send_to_customer:  true
+  spend_money:       true
+  publish_public:    true
+  delete_files:      true
+  change_settings:   true
+  contact_family:    true       # drafts the message; Drew sends it himself
+
+secrets:
+  required:
+    - ANTHROPIC_API_KEY
+  env_file_location: "~/.hermes/drew-personal/.env on the Oracle box"
+
+handover:
+  trained_contacts:
+    - Drew
+  support_terms: "Client zero."

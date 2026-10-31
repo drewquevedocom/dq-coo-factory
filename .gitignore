@@ -1,0 +1,8 @@
+# Never commit real secrets or generated client builds
+.env
+.env.*
+!.env.example
+clients/*/build/
+clients/*/.env*
+*.key
+*.pem

@@ -1,0 +1,84 @@
+# Drew's own business orchestrator. Client zero.
+# Fields marked TODO need Drew to confirm before the first deploy.
+
+client:
+  slug: drew-business
+  business_name: Drew Quevedo — Business
+  industry: AI marketing, SEO/GEO consulting, AI COO installs
+  owner_name: Drew
+  owner_timezone: America/Los_Angeles
+  one_liner: >
+    Runs the business side: drewquevedo.com, LASO Imaging, eConstruct and
+    Screen Zombies. Keeps the work moving inside about 15 hours a week,
+    and brings Drew only what needs a decision.
+
+delivery:
+  target: hermes-vps
+  host_notes: >
+    Oracle Cloud Always Free ARM, 2 OCPU / 12 GB, reached over Tailscale only.
+    No public ports. Drew's own Oracle account.
+  data_location: Drew's own VPS
+
+stack:
+  email: gmail
+  calendar: google
+  crm: none
+  accounting: TODO          # QuickBooks? confirm
+  website: drewquevedo.com
+  phone: none               # SignalWire later; Telegram covers it for now
+  storage: TODO             # Google Drive? confirm
+  other:
+    - Supabase
+    - Cloudflare
+    - GitHub
+
+ventures:
+  # Named so lead-triage can route by source and keep separate tallies.
+  - name: Robots for the Trades
+    lead_source: robots-for-trades
+    mode: demand-mapping      # count and pattern-spot; never pitch
+    plan: ventures/robots-for-the-trades.md
+
+integrations_requested:
+  - gmail
+  - google-calendar
+  - telegram
+
+agents:
+  daily_brief:      true
+  lead_triage:      true
+  inbox_triage:     true
+  invoice_chase:    false   # turn on when LASO/eConstruct invoicing moves here
+  content_engine:   true
+  rnd_scout:        true
+
+schedule:
+  daily_brief_time:   "09:00"
+  weekly_review_day:  "monday"
+  rnd_scan_day:       "friday"
+  quiet_hours:        "21:00-06:00"
+
+contact:
+  primary: telegram
+  escalation: email
+  wake_for:
+    - A client is leaving
+    - The business is actively losing money
+
+approval_gates:
+  send_to_customer:  true
+  spend_money:       true
+  publish_public:    true
+  delete_files:      true
+  change_settings:   true
+  contact_family:    true
+
+secrets:
+  required:
+    - ANTHROPIC_API_KEY
+  env_file_location: "~/.hermes/drew-business/.env on the Oracle box"
+
+handover:
+  trained_contacts:
+    - Drew
+  support_terms: "Client zero. Drew maintains it."

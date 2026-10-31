@@ -1,0 +1,67 @@
+# dq-coo-factory — client spec schema
+# One file defines a client. Everything else is generated from templates.
+# Hermes fills this in by interviewing Drew (see templates/skills/clone-coo.md).
+
+client:
+  slug:            # lowercase, no spaces. Becomes clients/<slug>/
+  business_name:
+  industry:
+  owner_name:
+  owner_timezone:  # IANA, e.g. America/Los_Angeles
+  one_liner:       # what the business does, in the owner's own words
+
+delivery:
+  target:          # hermes-local | hermes-vps | claude-only
+  host_notes:      # free text: their machine spec, VPS provider, who pays for it
+  data_location:   # "client machine" | "client VPS" | "client Claude account"
+
+stack:
+  # Only list what they actually use. Anything absent is simply not wired.
+  email:           # gmail | m365 | other | none
+  calendar:        # google | outlook | none
+  crm:             # name or none
+  accounting:      # quickbooks | xero | none
+  website:         # url or none
+  phone:           # signalwire | telnyx | none
+  storage:         # google-drive | dropbox | local | none
+  other: []
+
+integrations_requested: []   # names only; each one must map to a skill below
+
+agents:
+  # Which skills to generate. Drop any the client doesn't need.
+  daily_brief:      true
+  lead_triage:      true
+  inbox_triage:     true
+  invoice_chase:    false
+  content_engine:   false
+  rnd_scout:        true
+
+schedule:
+  daily_brief_time:   "09:00"
+  weekly_review_day:  "monday"
+  rnd_scan_day:       "friday"
+  quiet_hours:        "21:00-06:00"
+
+contact:
+  # How the agent reaches the owner.
+  primary:    telegram      # telegram | email | sms | voice
+  escalation: email
+  wake_for:   []            # the ONLY reasons to interrupt outside quiet hours
+
+approval_gates:
+  # Hard stops. The agent drafts; a human confirms. Never remove these silently.
+  send_to_customer:  true
+  spend_money:       true
+  publish_public:    true
+  delete_files:      true
+  change_settings:   true
+
+secrets:
+  # NEVER store values here. Names only. Values live in the client's own .env.
+  required: []
+  env_file_location: ""
+
+handover:
+  trained_contacts: []
+  support_terms: "One-time install. Custom work billed hourly."

@@ -1,0 +1,62 @@
+# FIRST REAL CLIENT — draft. Values marked TODO need Drew or Frank to confirm.
+
+client:
+  slug: econstruct
+  business_name: eConstruct
+  industry: Residential and commercial construction, Los Angeles
+  owner_name: Frank            # TODO confirm preferred name on handover docs
+  owner_timezone: America/Los_Angeles
+  one_liner: TODO — in Frank's own words, not Drew's
+
+delivery:
+  target: claude-only          # TODO confirm with Frank
+  host_notes: >
+    Frank runs his own Claude account for the client dashboard, separate from
+    Drew's API. No server to manage on his side.
+  data_location: client Claude account
+
+stack:
+  email: TODO
+  calendar: TODO
+  crm: none                    # TODO confirm
+  accounting: TODO
+  website: econstructhomes.com
+  phone: none
+  storage: TODO
+  other: []
+
+integrations_requested: []     # TODO from the interview
+
+agents:
+  daily_brief:      true
+  lead_triage:      true
+  inbox_triage:     true
+  invoice_chase:    false
+  content_engine:   true       # SEO/GEO work is already part of the retainer
+  rnd_scout:        false
+
+schedule:
+  daily_brief_time:   "08:00"  # TODO confirm with Frank
+  weekly_review_day:  "monday"
+  rnd_scan_day:       "friday"
+  quiet_hours:        "19:00-06:00"
+
+contact:
+  primary: email               # TODO confirm — Telegram may not suit a GC
+  escalation: email
+  wake_for: []                 # TODO Frank decides what is worth interrupting him
+
+approval_gates:
+  send_to_customer:  true
+  spend_money:       true
+  publish_public:    true
+  delete_files:      true
+  change_settings:   true
+
+secrets:
+  required: []
+  env_file_location: ""        # on Frank's machine, never in this repo
+
+handover:
+  trained_contacts: []
+  support_terms: "One-time install. Custom work billed at $200/hr."
