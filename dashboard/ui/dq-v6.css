@@ -1,0 +1,103 @@
+/* DQ OS v6 - density pass. Loads last. Makes the board fit one screen:
+   smaller core, tighter panels, capped heights with internal scroll,
+   four-box right rail. */
+:root{--dqh:calc(100vh - 92px)}
+main.grid{padding:9px !important}
+.dqwrap{gap:9px;grid-template-columns:252px minmax(0,1fr) 342px;align-items:start}
+.dqcol{gap:9px}
+
+/* core: about a third of what it was */
+.panel.center #reactor,.panel.center .reactor{
+ min-height:188px !important;height:188px !important;border-radius:9px}
+.panel.center{padding:9px !important}
+.dq-glass{width:min(188px,25%);padding:6px 8px}
+.dq-glass h4{font-size:6.5px;margin-bottom:3px}
+.dq-glass p{font-size:10px;-webkit-line-clamp:2}
+.dq-glass .mt{font-size:7px;margin-top:3px}
+.dq-glass .gbig,.gbig{font-size:15px}
+.dq-glass .grow,.grow{font-size:9px;padding:1px 0}
+.g2,.dq-g2{display:none}
+
+/* global density */
+.panel{padding:9px !important}
+.panel-head{margin-bottom:7px !important}
+.panel-head h2,.dqp .panel-head h2{font-size:9px;letter-spacing:.14em}
+.dqp .bd{gap:5px}
+.dq-rows{border-radius:8px}
+.dq-row{padding:4px 8px}
+.dq-row .k{font-size:8px}
+.dq-row .v{font-size:9px}
+.dq-kpi{padding:5px 7px}
+.dq-kpi b{font-size:13px}
+.dq-kpi span{font-size:6.5px}
+.dq-rev .big{font-size:24px}
+.dq-unit,.dq-int,.dq-dev,.dq-task,.dq-idea,.dq-ag{padding:5px 7px}
+.dq-f .tr{height:13px}
+.dq-f .lb{min-width:64px;font-size:8px}
+.dq-sch{padding:4px 0}
+.dq-estop{padding:10px;font-size:12px}
+.dq-mode{padding:5px 3px;font-size:8px}
+.dq-mode b{font-size:9px}
+#cmds .cmd{padding:5px 7px}
+#cmds .cmd b{font-size:9.5px}
+#cmds .cmd span{font-size:8px}
+.panel.center #cmds{grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:5px;margin-top:9px}
+#input{min-height:56px !important;font-size:11px;padding:8px 9px}
+.composer .actions{gap:5px}
+.ctl{padding:6px 11px !important;font-size:11px !important}
+.dq-vbar{padding:6px 9px}
+#dq-vw{height:22px}
+.dq-vmic{width:30px;height:30px}
+.dq-vc{padding:3px 8px;font-size:8.5px}
+.response{padding:8px !important}
+.rbody{font-size:11px;max-height:92px;overflow:auto}
+
+/* capped panels so the page fits one screen */
+.dqcol.l .panel .bd,.dqcol.l .panel>div:not(.panel-head),
+.dqcol.r .panel .bd,.dqcol.r .panel>div:not(.panel-head){max-height:none}
+.dq-cap{max-height:188px;overflow:auto}
+.dq-cap::-webkit-scrollbar{width:5px}
+.dq-cap::-webkit-scrollbar-thumb{background:rgba(54,214,245,.22);border-radius:99px}
+.dqcol.l,.dqcol.r{max-height:var(--dqh);overflow:auto;padding-right:3px}
+.dqcol.l::-webkit-scrollbar,.dqcol.r::-webkit-scrollbar{width:5px}
+.dqcol.l::-webkit-scrollbar-thumb,.dqcol.r::-webkit-scrollbar-thumb{
+ background:rgba(54,214,245,.22);border-radius:99px}
+
+/* right rail: four boxes, two up two down */
+.dqcol.r{display:grid;grid-template-columns:1fr;gap:9px;align-content:start}
+
+/* compact variants */
+.dq-mini .bd{gap:4px}
+.dq-mini .dq-row{padding:3px 7px}
+.dq-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:5px}
+.dq-st{padding:5px 6px;border-radius:7px;background:var(--well);border:1px solid var(--line);
+ text-align:center}
+.dq-st b{display:block;font-family:var(--disp);font-size:14px;font-weight:700;line-height:1.1;
+ font-variant-numeric:tabular-nums;color:var(--cyan)}
+.dq-st span{display:block;font:6.5px var(--mono,monospace);letter-spacing:.1em;color:var(--dim);margin-top:1px}
+.dq-st.g b{color:var(--green)} .dq-st.a b{color:var(--amber)}
+.dq-st.r b{color:var(--red)} .dq-st.z b{color:var(--faint)}
+.dq-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:6px}
+.dq-tile{padding:6px 8px;border-radius:8px;background:var(--well);border:1px solid var(--line);min-width:0}
+.dq-tile .h{display:flex;align-items:center;gap:5px;font:7px var(--mono,monospace);
+ letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.dq-tile .h i{width:4px;height:4px;border-radius:50%;background:var(--faint);flex:none}
+.dq-tile .h i.ok{background:var(--green)} .dq-tile .h i.w{background:var(--amber)}
+.dq-tile .h i.b{background:var(--red)}
+.dq-tile b{display:block;font-family:var(--disp);font-size:14px;font-weight:600;margin-top:2px;
+ font-variant-numeric:tabular-nums}
+.dq-tile span{display:block;font-size:9px;color:var(--mut);white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis}
+
+/* centre fills its dead space */
+.dq-centre-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:9px}
+.dq-urows{grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:9px}
+
+@media (max-width:1500px){.dqwrap{grid-template-columns:240px minmax(0,1fr) 300px}}
+@media (max-width:1280px){.dqwrap{grid-template-columns:232px minmax(0,1fr)}
+ .dqcol.l,.dqcol.r{max-height:none;overflow:visible}
+ .dqcol.r{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(252px,1fr))}}
+@media (max-width:900px){.dqwrap{grid-template-columns:minmax(0,1fr)}
+ .dqcol.r{grid-column:auto;grid-template-columns:1fr}
+ .panel.center #reactor,.panel.center .reactor{min-height:150px !important;height:150px !important}
+ .dq-glass{display:none}}
