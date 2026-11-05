@@ -1,0 +1,77 @@
+/* DQ OS v7 - undo the bad caps, shrink the Jarvis block hard, 4 real right boxes. */
+
+/* 1. kill v6's clipping. Panels size to content again. */
+.dqcol.l,.dqcol.r{max-height:none !important;overflow:visible !important}
+.dqcol.l .dq-cap,.dqcol.l .bd{max-height:none !important;overflow:visible !important}
+.dqcol.r .bd{max-height:none !important}
+#toolsList{max-height:92px;overflow:auto}
+#open-list{max-height:none}
+#log{max-height:84px;overflow:auto}
+
+/* 2. the Jarvis block: STANDBY through Transmit, about a quarter of its size */
+.panel.center #reactor,.panel.center .reactor{
+ min-height:104px !important;height:104px !important;border-radius:8px}
+.panel.center{padding:8px !important}
+.dq-glass{display:none !important}
+.panel.center #cmds{grid-template-columns:repeat(auto-fit,minmax(78px,1fr)) !important;
+ gap:4px !important;margin-top:7px !important}
+#cmds .cmd{padding:4px 6px !important}
+#cmds .cmd b{font-size:9px !important}
+#cmds .cmd span{font-size:7.5px !important;opacity:.75}
+.dq-vbar{padding:4px 8px !important;gap:8px}
+#dq-vw{height:16px !important}
+.dq-vmic{width:25px !important;height:25px !important}
+.dq-vmic svg{width:12px;height:12px}
+.dq-vst{font-size:7.5px}
+.dq-vc{padding:2px 7px !important;font-size:8px !important}
+.response{padding:6px 8px !important;margin-top:7px !important}
+.rhead{font-size:7.5px !important;margin-bottom:3px !important}
+.rbody{font-size:10.5px !important;max-height:52px !important;min-height:30px;overflow:auto}
+.composer{margin-top:7px !important}
+#input{min-height:40px !important;max-height:70px;font-size:10.5px !important;padding:6px 8px !important}
+.tip{font-size:7.5px !important;margin:4px 0 !important}
+.composer .actions{gap:4px !important}
+.ctl{padding:5px 9px !important;font-size:10px !important}
+.ctl.primary{padding:5px 14px !important}
+
+/* 3. right rail: four boxes, each short enough that all four are on screen */
+.dqcol.r{display:flex !important;flex-direction:column;gap:9px}
+.dqcol.r>.panel{max-height:216px;display:flex;flex-direction:column;overflow:hidden}
+.dqcol.r>.panel>.panel-head{flex:none}
+.dqcol.r>.panel>.bd,.dqcol.r>.panel>div:not(.panel-head){overflow:auto;min-height:0}
+.dqcol.r>.panel ::-webkit-scrollbar{width:5px}
+.dqcol.r>.panel ::-webkit-scrollbar-thumb{background:rgba(54,214,245,.22);border-radius:99px}
+.dqcol.r .need{padding:6px 8px}
+.dqcol.r .need p{font-size:11px}
+.dqcol.r .dq-task,.dqcol.r .dq-ag{padding:5px 7px}
+
+/* 4. density for the new centre panels */
+.dq-centre-rows,.dq-urows{grid-template-columns:repeat(auto-fit,minmax(178px,1fr)) !important;gap:9px}
+.dq-strip{grid-template-columns:repeat(auto-fit,minmax(66px,1fr))}
+.dq-st{padding:4px 5px}
+.dq-st b{font-size:12.5px}
+.dq-tiles{grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
+.dq-tile{padding:5px 7px}
+.dq-tile span{font-size:8.5px}
+.dq-dev,.dq-task,.dq-ag,.dq-unit,.dq-int{padding:4px 7px}
+.dq-sch{padding:3px 0}
+.dq-sch .b b{font-size:10.5px}
+.dq-sch .b span{font-size:7.5px}
+.dq-rev .big{font-size:21px}
+.dq-kpi b{font-size:12.5px}
+.dq-estop{padding:9px !important;font-size:11.5px !important}
+
+/* 5. left column stays readable, just dense */
+.dqcol.l .panel{padding:8px !important}
+.dqcol.l .dq-unit .nm{font-size:10.5px}
+.dqcol.l .dq-unit .st{font-size:7px}
+.dqcol.l .dq-unit .v{font-size:9px}
+
+@media (max-width:1500px){.dqwrap{grid-template-columns:234px minmax(0,1fr) 304px}}
+@media (max-width:1280px){.dqwrap{grid-template-columns:226px minmax(0,1fr)}
+ .dqcol.r{grid-column:1/-1;display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(248px,1fr))}}
+@media (max-width:900px){.dqwrap{grid-template-columns:minmax(0,1fr)}
+ .dqcol.r{grid-column:auto;display:flex !important}
+ .dqcol.r>.panel{max-height:none}
+ .panel.center #reactor,.panel.center .reactor{min-height:96px !important;height:96px !important}}
