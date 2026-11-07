@@ -81,8 +81,13 @@ var DIAG_ROWS=[['AI Model','sy-brain'],['AI Providers','4 connected','ok'],
  ['Voice','sy-voice'],['Connected apps','8 of 12','w'],
  ['Memory','3,380 entries','ok'],['Storage','not reported','z'],['Running for','sy-clock']];
 var VC=['"Jarvis, daily brief"','"Work the walk-in list"','"What needs me"','"Cash position"'];
-var AGENTS=[['Gateway','sy-gw','GW'],['Brain','sy-brain','BRN'],['Voice','sy-voice','VOX'],
- ['Profile','sy-profile','PRF'],['Runtime','sy-runtime','RTM'],['Clock','sy-clock','CLK']];
+var AGENTS=[
+ ['Lead Agent','sy-gw','idle \u2014 no list loaded','M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14M20 20l-4-4'],
+ ['Content Agent','sy-brain','idle','M5 4h11l3 3v13H5zM8.5 11h7M8.5 15h4.5'],
+ ['SEO Agent','sy-brain','idle','M4 18V9M10 18V5M16 18v-6M22 18v-9'],
+ ['Ops Agent','sy-runtime','guards armed \u00b7 5m cadence','M12 2l8 4v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6z'],
+ ['Voice Agent','sy-voice','','M9 3h6v11a3 3 0 0 1-6 0zM5 12a7 7 0 0 0 14 0'],
+ ['R&amp;D Scout','sy-profile','standby','M12 3a9 9 0 1 0 9 9M12 3v9l6.4 6.4']];
 
 /* ---------- state ---------- */
 var halted=ld('dq.halt',false),hmode=ld('dq.mode','hitl');
@@ -232,8 +237,10 @@ cR.appendChild(pR);
 /* 2. Agents Live Work */
 var at=panel('Agents Live Work','<span id="dq-agc">--</span>');
 AGENTS.forEach(function(a){at.b.appendChild(el('div','dq-ag',
- '<span class="d"></span><div style="min-width:0"><div class="nm">'+a[0]+
- '</div><em data-src="'+a[1]+'">--</em></div><span class="cd">'+a[2]+'</span>'))});
+ '<span class="d"></span><span class="ag-ic">'+ic(a[3])+'</span>'+
+ '<div style="min-width:0"><div class="nm">'+a[0]+
+ '</div><em data-src="'+a[1]+'" data-idle="'+esc(a[2])+'">--</em></div>'+
+ '<canvas class="dq-spark" aria-hidden="true"></canvas>'))});
 cR.appendChild(at.p);
 
 /* 3. Current Operations */
@@ -256,7 +263,29 @@ if(db)sb.b.appendChild(db);
 cR.appendChild(sb.p);
 
 
-/* ---------- topbar: alerts + director ---------- */
+/* ---------- topbar: wordmark, clock, alerts, director ---------- */
+(function(){
+ var wm=$('.wordmark'),sb=$('.sub');
+ if(wm)wm.textContent='DQ OS';
+ if(sb)sb.textContent='COMMAND CENTER';
+ var br=$('.brand');
+ if(br){
+  var ck=el('div','dq-clock','<div class="cd" id="dq-cd">\u2014</div>'+
+   '<div class="ct" id="dq-ct">--:--:--</div>');
+  br.parentNode.insertBefore(ck,br.nextSibling);
+  function two(n){return n<10?'0'+n:''+n}
+  function tick(){
+   var d=new Date(),h=d.getHours(),ap=h>=12?'pm':'am',hh=h%12||12;
+   var a=D.getElementById('dq-ct'),b=D.getElementById('dq-cd');
+   if(a)a.textContent=two(hh)+':'+two(d.getMinutes())+':'+two(d.getSeconds())+' '+ap;
+   if(b)b.textContent=d.toLocaleDateString(undefined,
+    {weekday:'long',month:'long',day:'numeric'});
+  }
+  tick();setInterval(tick,1000);
+ }
+})();
+
+
 var strip=$('.status-strip'),A=null;
 if(strip){
  var dirbtn=el('button','dq-dirbtn');dirbtn.type='button';
@@ -298,6 +327,44 @@ function fold(){
  moreBtn.style.display='';
  moreBtn.textContent=ul.classList.contains('dq-fold')?('SHOW '+hid+' MORE'):'SHOW LESS';
 }
+
+/* ---------- Needs You: approve / defer cards ---------- */
+/* next-moves.js owns this list, so decorating is idempotent and re-runs
+   on every refresh. A card the user has acted on keeps its state. */
+var acted=ld('dq.acted',{});
+function decorate(){
+ if(!ul)return;
+ Array.prototype.forEach.call(ul.children,function(li){
+  if(li.getAttribute('data-dq')==='1')return;
+  li.setAttribute('data-dq','1');
+  var raw=(li.textContent||'').replace(/\s+/g,' ').trim().replace(/^\d+[.)\s]*/,'');
+  var cut=raw.indexOf('. ');
+  var title=cut>8?raw.slice(0,cut):raw;
+  var sub=cut>8?raw.slice(cut+2):'';
+  if(title.length>74){sub=title.slice(74)+(sub?' '+sub:'');title=title.slice(0,74)}
+  var key=title.slice(0,40);
+  li.innerHTML='<div class="dq-need"><p>'+esc(title)+'</p>'+
+   (sub?'<span class="mt">'+esc(sub)+'</span>':'')+
+   '<div class="dq-act"><button type="button" class="ok" data-k="'+esc(key)+
+   '">\u2713 Approve</button><button type="button" class="no" data-k="'+esc(key)+
+   '">Defer</button></div></div>';
+  if(acted[key])settle(li,acted[key]);
+ })}
+function settle(li,how){
+ var row=li.querySelector('.dq-act');if(!row)return;
+ li.classList.add('dq-settled');
+ row.innerHTML='<span class="dq-said" style="color:var(--'+
+  (how==='ok'?'green':'dim')+')">'+(how==='ok'?'approved \u2014 queued':'deferred')+'</span>';
+}
+if(ul)ul.addEventListener('click',function(e){
+ var b=e.target.closest('[data-k]');if(!b)return;
+ var how=b.classList.contains('ok')?'ok':'no';
+ var key=b.getAttribute('data-k');
+ acted[key]=how;sv('dq.acted',acted);
+ settle(b.closest('li'),how);
+ toast(how==='ok'?'Approved \u2014 handed to the agents':'Deferred');
+ refresh();
+});
 
 /* ---------- modes and halt ---------- */
 function setMode(m,quiet){
@@ -344,6 +411,8 @@ function wave(c,o){o=o||{};var x=c.getContext('2d'),raf=null,p=Math.random()*10;
  sz();if(!RM)raf=requestAnimationFrame(dr);else dr();
  return{rz:sz,amp:function(a){amp=a}}}
 var vw=wave(D.getElementById('dq-vw'),{amp:.2,speed:.06});
+D.querySelectorAll('.dq-spark').forEach(function(c){
+ wave(c,{amp:.5,speed:.06+Math.random()*.05})});
 var vmode='idle',vcyc=null;
 function vpaint(){
  var V={idle:'IDLE',listening:'LISTENING',thinking:'THINKING',speaking:'SPEAKING'};
@@ -556,10 +625,12 @@ function refresh(){
  var live=0;
  at.b.querySelectorAll('.dq-ag').forEach(function(row){
   var m=row.querySelector('em'),v=txt(m.getAttribute('data-src'));
-  m.textContent=v||'no signal';row.classList.remove('on','bad');
-  if(halted)return;
-  if(v&&bad(v))row.classList.add('bad');
-  else if(good(v)){row.classList.add('on');live++}});
+  var idle=m.getAttribute('data-idle')||'';
+  row.classList.remove('on','bad');
+  if(halted){m.textContent='halted';return}
+  if(v&&bad(v)){row.classList.add('bad');m.textContent='blocked \u2014 '+v}
+  else if(good(v)){row.classList.add('on');live++;m.textContent=idle||v}
+  else m.textContent='no signal'});
  var ac=D.getElementById('dq-agc');
  if(ac)ac.textContent=live+' of '+AGENTS.length;
  var sx=D.getElementById('dq-sysx');
@@ -568,6 +639,7 @@ function refresh(){
  /* alerts from the real moves count */
  if(A){
   var n=parseInt(txt('moves-count'),10);if(isNaN(n))n=0;
+  if(ul)n=Math.max(0,n-ul.querySelectorAll('li.dq-settled').length);
   var C={hitl:n,sms:0,call:0,mail:null},tot=0;
   for(var k in C){var e=D.getElementById('dqn-'+k);if(!e)continue;
    var v2=C[k];e.textContent=v2===null?'\u2014':String(v2);
@@ -600,7 +672,7 @@ function refresh(){
  var bp=D.getElementById('dq-bpm');
  if(bp)bp.textContent=halted?38:(vmode==='speaking'?96:vmode==='thinking'?78:
   vmode==='listening'?66:52);
- paintHalt();fold();
+ paintHalt();decorate();fold();
 }
 
 /* ---------- go ---------- */

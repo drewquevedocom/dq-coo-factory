@@ -370,3 +370,33 @@ body.dq-halt .stword{color:#ffe0a8;text-shadow:0 0 30px var(--amber)}
   *{animation-duration:.01ms !important;animation-iteration-count:1 !important}
   #cmds .cmd:hover{transform:none}
 }
+
+/* ---- Needs You cards ---- */
+#open-list li{border-top:none;padding:0 0 6px}
+.dq-need{padding:8px 9px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line);
+  border-left:2px solid var(--amber)}
+.dq-need p{margin:0;font-size:11.5px;line-height:1.35;color:var(--ink)}
+.dq-need .mt{display:block;font:7.5px var(--mono);letter-spacing:.07em;color:var(--dim);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dq-act{display:flex;gap:5px;margin-top:7px}
+.dq-act button{flex:1;padding:5px;border-radius:6px;font:9.5px var(--mono);cursor:pointer;
+  border:1px solid var(--line-2);background:var(--well);color:var(--mut)}
+.dq-act button.ok{color:var(--green);border-color:rgba(62,224,143,.35);background:rgba(62,224,143,.07)}
+.dq-act button.no{color:var(--red);border-color:rgba(255,95,109,.3)}
+.dq-act button:hover{filter:brightness(1.3)}
+.dq-said{font:9.5px var(--mono)}
+li.dq-settled .dq-need{opacity:.4;border-left-color:var(--faint)}
+
+/* ---- agent rows: icon + sparkline ---- */
+.ag-ic{width:22px;height:22px;border-radius:6px;flex:none;display:grid;place-items:center;
+  border:1px solid var(--line-2);background:rgba(255,255,255,.03)}
+.ag-ic svg{width:12px;height:12px;fill:none;stroke:var(--cyan);stroke-width:1.7}
+.dq-ag.bad .ag-ic svg{stroke:var(--red)}
+.dq-spark{width:30px;height:14px;flex:none;margin-left:auto}
+
+/* ---- topbar clock ---- */
+.dq-clock{margin-left:14px}
+.dq-clock .cd{font:9px var(--mono);color:var(--dim);letter-spacing:.08em}
+.dq-clock .ct{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:.03em;
+  font-variant-numeric:tabular-nums;color:var(--cyan);text-shadow:0 0 20px var(--soft);line-height:1.1}
+@media (max-width:880px){.dq-clock{margin-left:0;flex-basis:100%}}
