@@ -81,6 +81,18 @@ var DIAG_ROWS=[['AI Model','sy-brain'],['AI Providers','4 connected','ok'],
  ['Voice','sy-voice'],['Connected apps','8 of 12','w'],
  ['Memory','3,380 entries','ok'],['Storage','not reported','z'],['Running for','sy-clock']];
 var VC=['"Jarvis, daily brief"','"Work the walk-in list"','"What needs me"','"Cash position"'];
+/* ---------- micro-acquisition pipeline ----------
+   DEALS rows: [name, platform, ask, monthly net, stage index, note]
+   stage index maps into PHASES below. Jarvis writes this list; an empty
+   list is the honest state until the first target is actually sourced. */
+var PHASES=[['SOURCE','M0-1'],['LOI','M1'],['CLOSE','M1'],
+            ['INJECT','M1-4'],['STABLE','M4-6'],['EXIT','M6-8']];
+var DEALS=ld('dq.deals',[]);
+var ACQ_NEXT=[
+ 'Set $20k-$150k alerts on Acquire, Flippa, Empire Flippers',
+ 'Holdco operating agreement with transaction counsel',
+ 'Package the day-1 AI injection kit (AgentIQ + local GEO stack)'];
+
 var AGENTS=[
  ['Lead Agent','sy-gw','idle \u2014 no list loaded','M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14M20 20l-4-4'],
  ['Content Agent','sy-brain','idle','M5 4h11l3 3v13H5zM8.5 11h7M8.5 15h4.5'],
@@ -141,6 +153,34 @@ bu.b.appendChild(el('div','dq-tiles',UNITS.map(function(u){
  return '<div class="dq-tile"><div class="h"><i class="'+u[2]+'"></i>'+esc(u[0])+
   '</div><span>'+esc(u[1])+'</span></div>'}).join('')));
 cL.appendChild(bu.p);
+
+/* micro-acquisitions */
+var acq=panel('Micro-Acquisitions','4-8 MO');
+var acqRail=el('div','dq-ph');
+acqRail.innerHTML=PHASES.map(function(ph,i){
+ var n=DEALS.filter(function(d){return d[4]===i}).length;
+ return '<div class="dq-phx'+(n?' on':'')+'"><b>'+(n||'\u00b7')+'</b><span>'+
+  ph[0]+'</span><em>'+ph[1]+'</em></div>'}).join('');
+acq.b.appendChild(acqRail);
+if(DEALS.length){
+ var dl=el('div','dq-deals');
+ dl.innerHTML=DEALS.map(function(d){
+  return '<div class="dq-deal"><div class="dh"><b>'+esc(d[0])+'</b>'+
+   '<span>'+esc(PHASES[d[4]]?PHASES[d[4]][0]:'?')+'</span></div>'+
+   '<div class="dm">'+esc(d[1])+' \u00b7 ask '+money(d[2])+
+   ' \u00b7 net '+money(d[3])+'/mo</div>'+
+   (d[5]?'<div class="dn">'+esc(d[5])+'</div>':'')+'</div>'}).join('');
+ acq.b.appendChild(dl);
+}else{
+ acq.b.appendChild(el('div','dq-acqempty',
+  'No targets sourced yet. Three things open the pipeline:'));
+ var ul2=el('ol','dq-acqnext');
+ ul2.innerHTML=ACQ_NEXT.map(function(t){return '<li>'+esc(t)+'</li>'}).join('');
+ acq.b.appendChild(ul2);
+}
+acq.b.appendChild(el('div','dq-acqfoot',
+ 'Exit target 3-5x SDE \u00b7 owner time under 5 hrs/wk is the multiple'));
+cL.appendChild(acq.p);
 
 /* ai core */
 var aco=panel('AI Core Overview','<span id="dq-corex">--</span>');

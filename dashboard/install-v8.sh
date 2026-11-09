@@ -6,8 +6,8 @@ set -euo pipefail
 
 UI=/data/jarvis-hermes-dashboard/ui
 RAW=https://raw.githubusercontent.com/drewquevedocom/dq-coo-factory/main/dashboard/ui
-CSS_SHA=40ccd4017e535c173c3ccdb68c8db93af34bc1e1e5dd949a95af7ded8107a37b
-JS_SHA=e455edc45a6aafb21945acf5d11c565fb7d45abbdce5a51fa1b8fd46195576e1
+CSS_SHA=cebf0cbe69b8f3f5721447ad942af267891ea41d68f2efd6fc955387dcb99ab2
+JS_SHA=4463abd6e0c905eb678fe6cedd5c4b3d46078be7060f5c02fcddbea41ae0d3d4
 
 cd "$UI"
 STAMP=$(date +%Y%m%d-%H%M%S)
